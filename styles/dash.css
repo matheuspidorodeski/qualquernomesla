@@ -1,0 +1,632 @@
+/* Estilos básicos */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #333;
+  color: #fff;
+}
+
+.header {
+  background-color: black;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 36px;
+  color: white;
+}
+
+/* Menu principal */
+.menu {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+.menu-item {
+  margin-left: 20px;
+  color: white;
+  font-size: 14px;
+}
+
+.menu-item .fas {
+  margin-right: 5px;
+}
+
+.search-bar {
+  margin-top: 10px;
+  padding: 10px;
+  border: 2px solid #555;
+  border-radius: 25px;
+  width: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  background-color: #fff;
+  color: #333;
+  padding-left: 40px;
+  background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/svgs/solid/search.svg');
+  background-size: 20px;
+  background-position: 10px center;
+  background-repeat: no-repeat;
+}
+
+/* Botões de menu */
+.account-button,
+.favorites-button,
+.mode-button {
+  background-color: transparent;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.cart-button {
+  background-color: green;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+/* Banner */
+.main-banner {
+  width: 100%;
+  height: 400px;
+  border-radius: 15px;
+  background-image: url('https://placehold.co/1920x400');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.banner-text {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.banner-text .sub-text {
+  font-size: 24px;
+}
+
+
+/* Container dos produtos */
+.container2 {
+  width: 90%;
+  margin: 0 auto;
+  padding: 20px 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.header2 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  margin: 0 105px;
+}
+
+.header i {
+  color: rgb(153, 0, 255);
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.product-grid {
+  display: flex;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  margin: 0 105px;
+}
+
+.product {
+  background-color: #444;
+  border-radius: 5px;
+  padding: 10px;
+  width: 200px;
+  margin-right: 20px;
+  text-align: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+
+}
+
+
+.product img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.product h2 {
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.product .price {
+  color: green;
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+.product .discount {
+  color: rgb(255, 0, 0);
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+.product .installments {
+  color: #fff;
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(15, 15, 15, 0.5);
+  border: none;
+  color: white;
+  padding: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-size: 20px;
+}
+
+.nav-button.left {
+  left: 0;
+}
+
+.nav-button.right {
+  right: 0;
+}
+
+/* Botão de Atendimento */
+.support-button {
+  display: inline-block;
+  background-color: #000000;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Menu do Usuário */
+.menu-container {
+  position: relative;
+}
+
+
+
+.dropdown-menu button {
+  width: 100%;
+  background-color: #444;
+  color: #444;
+  padding: 10px;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-menu button:hover {
+  background-color: #555;
+}
+
+.header {
+  background-color: black;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
+            position: relative;
+          }
+          
+          .logo {
+            font-size: 36px;
+            color: white;
+          }
+          
+        /* Ajustes para o menu do usuário */
+        .menu-container {
+          position: relative;
+        }
+        
+        .menu-button {
+          background-color: transparent;
+          color: white;
+          padding: 10px 20px;
+          margin-right: 200px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 16px;
+        }
+        
+        .dropdown-menu {
+          display: none;
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background-color: #444;
+          border-radius: 5px;
+          overflow: hidden;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          width: 150px;
+          z-index: 10;
+        }
+        
+        .dropdown-menu button {
+          width: 100%;
+          background-color: #444;
+          color: white;
+          padding: 10px;
+          border: none;
+          text-align: left;
+          cursor: pointer;
+          font-size: 14px;
+        }
+        
+        .dropdown-menu button:hover {
+          background-color: #555;
+        }
+        
+        /* Exibe o menu dropdown quando o botão é clicado */
+        .menu-container:hover .dropdown-menu {
+          display: block;
+        }
+        
+        .search-bar {
+          padding: 10px;
+          border: 2px solid #555;
+          border-radius: 25px;
+          width: 50%;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          font-size: 16px;
+          background-color: #fff;
+          color: #333;
+            padding-left: 40px;
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/svgs/solid/search.svg');
+            background-size: 20px;
+            background-position: 10px center;
+            background-repeat: no-repeat;
+            margin-top: 10px;
+          }
+          
+          .product img {
+            width: 200px; /* ou qualquer largura desejada */
+            height: 200px; /* ou qualquer altura desejada */
+            object-fit: cover; /* Corta ou escalona a imagem para caber na área */
+          }
+          
+          /* Estilo para o botão de departamentos */
+          .dropdown {
+            position: relative;
+         display: inline-block;
+        }
+        
+        .departments-button {
+          padding: 10px;
+      background-color: #000000; /* Cor de fundo */
+      color: white; /* Cor do texto */
+      border: none; /* Remover borda */
+      cursor: pointer; /* Cursor de mão */
+      margin-left: 20px; /* Espaço entre o logo e o botão */
+    }
+
+      .dropdown-content {
+        display: none; /* Oculta o menu por padrão */
+        position: absolute;
+        background-color: #ea00ff; /* Cor de fundo do menu */
+        min-width: 160px; /* Largura mínima */
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Sombra */
+        z-index: 1; /* Coloca o menu em cima de outros elementos */
+      }
+      
+      .dropdown-content a {
+        color: black; /* Cor do texto */
+  padding: 12px 16px; /* Espaçamento */
+  text-decoration: none; /* Remove o sublinhado */
+  display: block; /* Cada item ocupa toda a largura */
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1; /* Cor de fundo ao passar o mouse */
+}
+
+/* Exibe o menu ao passar o mouse sobre o botão */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Estilo para o botão de departamentos */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.departments-button {
+  display: flex; /* Usar flexbox para alinhar o ícone e o texto */
+  align-items: center; /* Centraliza o conteúdo verticalmente */
+  padding: 10px 15px; /* Espaçamento interno */
+  background-color: #000000; /* Cor de fundo */
+  color: white; /* Cor do texto */
+  border: none; /* Sem borda */
+  border-radius: 5px; /* Cantos arredondados */
+  cursor: pointer; /* Cursor de mão ao passar o mouse */
+  margin-left: 20px; /* Espaço entre o logo e o botão */
+  font-size: 16px; /* Tamanho da fonte */
+  transition: background-color 0.3s; /* Transição suave para a cor de fundo */
+  border-radius: 5px;
+}
+
+.departments-button i {
+  margin-right: 5px; /* Espaço entre o ícone e o texto */
+}
+
+.dropdown-content {
+  display: none; /* Oculta o menu por padrão */
+  position: absolute;
+  background-color: #4e4d4d; /* Cor de fundo do menu */
+  min-width: 160px; /* Largura mínima do menu */
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Sombra */
+  z-index: 1; /* Coloca o menu em cima de outros elementos */
+  border-radius: 5px;
+  border: none;
+}
+
+.dropdown-content a {
+  color: rgb(255, 255, 255); /* Cor do texto */
+  padding: 12px 16px; /* Espaçamento */
+  text-decoration: none; /* Remove sublinhado */
+  display: block; /* Cada item ocupa toda a largura */
+}
+
+.dropdown-content a:hover {
+  background-color: #444; /* Cor de fundo ao passar o mouse */
+}
+
+/* Exibe o menu ao passar o mouse sobre o botão */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Mudança de cor do botão ao passar o mouse */
+.departments-button:hover {
+  background-color: #210e29; /* Cor de fundo ao passar o mouse */
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Espaça os itens do cabeçalho */
+    padding: 10px; /* Ajuste o preenchimento conforme necessário */
+  }
+  
+  .menu {
+    display: flex;
+    flex-grow: 1; /* Permite que o menu ocupe o espaço disponível */
+  }
+  
+  .menu-buttons {
+    display: flex;
+    align-items: center; /* Centraliza verticalmente os botões */
+  }
+  
+  .user-menu-container {
+    margin-left: auto; /* Move o menu de usuário para a direita */
+    position: relative; /* Para permitir que o dropdown funcione corretamente */
+  }
+
+.menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px; /* Ajuste o tamanho do ícone conforme necessário */
+}
+
+.dropdown-menu {
+  display: none; /* Esconde o menu por padrão */
+  position: absolute; /* Posiciona o dropdown abaixo do botão */
+  background-color: #444; /* Fundo branco do dropdown */
+  color: black; /* Cor do texto do dropdown */
+  border-radius: 5px; /* Bordas arredondadas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+  padding: 4px; /* Espaçamento interno do dropdown */
+  left: 15px; /* Move o menu dropdown para a esquerda em relação ao botão */
+}
+
+
+.user-menu-container:hover .dropdown-menu {
+  display: block; /* Mostra o menu ao passar o mouse */
+}
+
+body {
+    background-color: white; /* Cor de fundo padrão */
+    color: black; /* Cor do texto padrão */
+}
+
+body.dark-mode {
+    background-color: #333; /* Cor de fundo escuro */
+    color: white; /* Cor do texto em modo escuro */
+}
+
+.menu-buttons.dark-mode {
+    background-color: rgb(0, 0, 0); /* Cor do fundo do menu em modo escuro */
+}
+
+     .main-banner {
+            position: relative;
+            text-align: center;
+            border-radius: 5px;
+            color: white;
+        }
+        .main-banner img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .main-banner .text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 10px;
+            transform: translate(-50%, -50%);
+        }
+        .main-banner .text h1 {
+            font-size: 48px;
+            border-radius: 10px;
+            margin: 0;
+        }
+        .main-banner .text p {
+            font-size: 24px;
+            margin: 10px 0;
+            border-radius: 10px;
+        }
+        .main-banner .text button {
+            padding: 10px 20px;
+            background-color: #ff4500;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .promo-section {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background-color: #222;
+        }
+        .promo-section img {
+            width: 100%;
+            border-radius: 5px;
+            margin-right: 150px;
+        }
+        .categories {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background-color: #444;
+        }
+        .categories .category {
+            text-align: center;
+            padding: 10px;
+            background-color: #555;
+            border-radius: 5px;
+            width: 18%;
+        }
+        .categories .category i {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .categories .category p {
+            margin: 0;
+        }
+        .interest-section {
+            padding: 20px;
+            background-color: #333;
+        }
+        .interest-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .interest-section .products {
+            display: flex;
+            justify-content: space-around;
+        }
+        .interest-section .product {
+            background-color: #444;
+            padding: 10px;
+            border-radius: 5px;
+            width: 18%;
+            text-align: center;
+        }
+        .interest-section .product img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        .interest-section .product p {
+            margin: 10px 0;
+        }
+        
+        .promo-section img {
+          width: 600px; /* Ajuste o tamanho conforme necessário */
+          margin: 0 10px; /* Adiciona margem à esquerda e à direita */
+          display: inline-block; /* Garante que as imagens fiquem na mesma linha */
+      }
+      .promo-section {
+        background-color: #333; /* Cor de fundo branca */
+        padding: 10px; /* Adiciona um pouco de espaço ao redor das imagens */
+        border-radius: 5px; /* Arredonda os cantos */
+    }
+.product-navigation {
+    display: flex; /* Usa flexbox para alinhar os itens */
+    align-items: center; /* Alinha os itens verticalmente ao centro */
+    margin: 20px 0; /* Margem superior e inferior */
+}
+
+.product-grid {
+    display: flex; /* Exibe os produtos em linha */
+     /* Permite rolagem horizontal */
+    scroll-behavior: smooth; /* Rolagem suave */
+}
+
+.scroll-button {
+    background-color: #111; /* Cor de fundo azul */
+    color: white; /* Cor do texto branco */
+    border: none; /* Remove a borda */
+    padding: 10px 15px; /* Espaçamento interno */
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
+    font-size: 18px; /* Tamanho da fonte */
+    border-radius: 5px; /* Bordas arredondadas */
+    margin: 0 10px; /* Margem lateral */
+}
+
+.scroll-button:hover {
+    background-color: #250b3d; /* Cor de fundo mais escura no hover */
+}
+
+/* No seu arquivo CSS (dash.css) */
+
+.promo-section {
+  background-color: #ffffff; /* Cor padrão para o modo claro */
+  transition: background-color 0.3s ease; /* Transição suave para a mudança de cor */
+}
+
+  /* Estilo de fundo para promo-section em modo escuro */
+.promo-section.dark-mode {
+  background-color: #333; /* Cor de fundo para o modo escuro */
+}
+.promo-section.light-mode {
+  background-color: #f4f4f4; /* Cor de fundo para o modo claro */
+}

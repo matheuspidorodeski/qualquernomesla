@@ -1,0 +1,46 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+  }
+  
+  .carrinho {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+  }
+  
+  .produto {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .produto img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+  
+  .produto-info {
+    margin-left: 20px;
+  }
+  
+  .quantidade {
+    display: flex;
+    align-items: center;
+  }
+  
+  .btn {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* ... outros estilos para os demais elementos */
