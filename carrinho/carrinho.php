@@ -2,7 +2,11 @@
 session_start();
 include_once('../config.php');
 
-
+// Verifica se o usuário está logado e se o ID do cliente foi definido na sessão
+if (!isset($_SESSION['email']) || !isset($_SESSION['id_cliente'])) {
+    header('Location: ../login/login.php');
+    exit();
+}
 
 if (!isset($_SESSION['carrinho'])) {
     $_SESSION['carrinho'] = [];
@@ -70,9 +74,9 @@ function exibirCarrinho() {
             echo "<p>Preço: R$ " . number_format($produto['preco'], 2, ',', '.') . "</p>";
             echo "<p>Quantidade: " . $quantidade . "</p>";
             echo "<p>Subtotal: R$ " . number_format($subtotal, 2, ',', '.') . "</p>";
-            echo "<a href='carrinho.php?acao=remove&id=" . $id . "' class='btn btn-danger'><i class='fas fa-trash'></i> Excluir</a> ";
-            echo "<a href='carrinho.php?acao=increment&id=" . $id . "' class='btn btn-secondary'><i class='fas fa-plus'></i> Aumentar</a> ";
-            echo "<a href='carrinho.php?acao=decrement&id=" . $id . "' class='btn btn-secondary'><i class='fas fa-minus'></i> Diminuir</a>";
+            echo "<a href='carrinho.php?acao=remove&id=" . $id . "' class='btn btn-danger'><i class='fas fa-trash'></i></a> ";
+            echo "<a href='carrinho.php?acao=increment&id=" . $id . "' class='btn btn-secondary'><i class='fas fa-plus'></i></a> ";
+            echo "<a href='carrinho.php?acao=decrement&id=" . $id . "' class='btn btn-secondary'><i class='fas fa-minus'></i></a>";
             echo "</div>";
         } else {
             echo "<p>Produto com ID $id não encontrado.</p>";
@@ -91,7 +95,7 @@ function exibirCarrinho() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho de Compras</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM98P7e6bFDSnU1pXh7w2FsmFOi7UbZ00X79k2" crossorigin="anonymous">
     <style>
         body {
             background-color: #f8f9fa;
@@ -135,12 +139,16 @@ function exibirCarrinho() {
     <main class="container mt-5">
         <?php exibirCarrinho(); ?>
         
+        <!-- Exibe a mensagem de frete grátis apenas se houver itens no carrinho -->
         <?php if (!empty($_SESSION['carrinho'])): ?>
             <div class="alert alert-info" role="alert">
                 <h3>Frete Grátis!</h3>
                 <p>Oferecemos frete grátis para todo o Brasil.</p>
             </div>
-            
+        <?php endif; ?>
+        
+        <!-- Botão para finalizar compra -->
+        <?php if (!empty($_SESSION['carrinho'])): ?>
             <form action="../compra/compra.php" method="POST">
                 <button type="submit" class="btn btn-success" style="margin-top: 20px;">Finalizar Compra</button>
             </form>
