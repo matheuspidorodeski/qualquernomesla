@@ -74,7 +74,7 @@ $result_users = $conexao->query($sql_users);
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">SISTEMA DO ADM</a>
+            <a class="navbar-brand" href="#">SISTEMA DE ADMIRO DA TECPRO</a>
             <div class="logout-container">
                 <form method="POST" action="../paginadm/logoutadm.php">
                     <button type="submit" name="logout" class="logout-button">Sair</button>
@@ -84,11 +84,12 @@ $result_users = $conexao->query($sql_users);
     </nav>
     
     <div class="d-flex justify-content-center my-3 gap-3">
-        <a href="../dashboard/dashboard.php" class="btn btn-warning">Ir para dashboard</a>
-        <a href="../paginadm/gerenciar_adm.php" class="btn btn-success" onclick="return handleAdminRegistration(<?php echo $admin_level; ?>)">Cadastrar um Administrador</a>
-        <a href="../produtos/lista.php" class="btn btn-info" onclick="return checkProductPermission(<?php echo $admin_level; ?>)">Cadastrar Produtos</a>
-        <a href="../login/cadastro.php" class="btn btn-secondary">Cadastrar Usuário</a>
-    </div>
+    <a href="../dashboard/dashboard.php" class="btn btn-warning">Ir para dashboard</a>
+    <a href="../paginadm/gerenciar_adm.php" class="btn btn-success" onclick="return handleAdminRegistration(<?php echo $admin_level; ?>)">Cadastrar um Administrador</a>
+    <a href="../produtos/lista.php" class="btn btn-info" onclick="return checkProductPermission(<?php echo $admin_level; ?>)">Cadastrar Produtos</a>
+    <a href="../login/cadastro.php" class="btn btn-secondary">Cadastrar Usuário</a>
+    <a href="../estoque/estoque.php" class="btn btn-dark">Gerenciar Estoque</a>
+</div>
 
     <br>
     <?php

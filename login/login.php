@@ -92,6 +92,15 @@
                         <span id="emailError" class="error"></span>
                     </div>
                     <div class="form-group">
+                        <label for="cpf">CPF</label>
+                         <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" maxlength="14" required 
+                         oninput="formatarCPF(this)"
+                        pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+                            title="Digite o CPF no formato 000.000.000-00">
+                    </div>
+
+                
+                    <div class="form-group">
                         <label for="senha">Senha</label>
                         <input type="password" name="senha" id="senha" placeholder="Senha" required>
                     </div>
@@ -99,7 +108,7 @@
                 </form>
             </div>
             <a href="../login/cadastro.php" class="forgot-password">Não tem uma conta? Crie aqui</a>
-            <a href="../login/login.php" class="forgot-password">Esqueceu sua senha? Clique aqui</a>
+            <a href="https://wa.me/+554288697902" class="forgot-password">Esqueceu sua senha? Clique aqui</a>
         </div>
     </div>
 </body>

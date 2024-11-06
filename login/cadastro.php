@@ -4,6 +4,7 @@ if (isset($_POST['submit'])) {
     include_once('../config.php');
     $nome = $_POST['nome'];
     $email = $_POST['email'];
+    $cpf = $_POST['cpf'];
     $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT); // Criptografa a senha
     $telefone = $_POST['telefone'];
     $data_nascimento = $_POST['data_nascimento'];
@@ -11,8 +12,8 @@ if (isset($_POST['submit'])) {
     $estado = $_POST['estado'];
     $endereco = $_POST['endereco'];
 
-    $query = "INSERT INTO usuarios (nome, senha, email, telefone, data_nascimento, cidade, estado, endereco)
-              VALUES ('$nome', '$senha', '$email', '$telefone', '$data_nascimento', '$cidade', '$estado', '$endereco')";
+    $query = "INSERT INTO usuarios (nome, senha, email, cpf, telefone, data_nascimento, cidade, estado, endereco)
+              VALUES ('$nome', '$senha', '$email', '$cpf', '$telefone', '$data_nascimento', '$cidade', '$estado', '$endereco')";
 
     $result = mysqli_query($conexao, $query);
 
@@ -125,6 +126,13 @@ if (isset($_POST['submit'])) {
                         <label for="email">Email</label>
                         <input type="text" name="email" id="email" placeholder="Email" required oninput="validateEmail()">
                         <span id="emailError" class="error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cpf">CPF</label>
+                         <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" maxlength="14" required 
+                         oninput="formatarCPF(this)"
+                        pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"
+                            title="Digite o CPF no formato 000.000.000-00">
                     </div>
                     <div class="form-group">
                         <label for="telefone">Telefone</label>

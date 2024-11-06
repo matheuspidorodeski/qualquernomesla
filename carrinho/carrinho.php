@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 include_once('../config.php');
 
@@ -56,7 +56,7 @@ function exibirCarrinho() {
         return;
     }
 
-    echo "<h2>Produtos no Carrinho:</h2>";
+    echo "<div class='cart-container'>";
     $total = 0;
 
     foreach ($_SESSION['carrinho'] as $id => $quantidade) {
@@ -69,21 +69,28 @@ function exibirCarrinho() {
             $total += $subtotal;
 
             echo "<div class='cart-item'>";
+            echo "<img src='" . htmlspecialchars($produto['imagem']) . "' alt='" . htmlspecialchars($produto['nome']) . "' class='product-image'>";
+            echo "<div class='item-details'>";
             echo "<h3>" . htmlspecialchars($produto['nome']) . "</h3>";
-            echo "<img src='" . htmlspecialchars($produto['imagem']) . "' alt='" . htmlspecialchars($produto['nome']) . "' class='product-image'><br>";
-            echo "<p>Preço: R$ " . number_format($produto['preco'], 2, ',', '.') . "</p>";
+            echo "<p>R$ " . number_format($produto['preco'], 2, ',', '.') . "</p>";
             echo "<p>Quantidade: " . $quantidade . "</p>";
             echo "<p>Subtotal: R$ " . number_format($subtotal, 2, ',', '.') . "</p>";
-            echo "<a href='carrinho.php?acao=remove&id=" . $id . "' class='btn btn-danger'><i class='fas fa-trash'></i></a> ";
-            echo "<a href='carrinho.php?acao=increment&id=" . $id . "' class='btn btn-secondary'><i class='fas fa-plus'></i></a> ";
-            echo "<a href='carrinho.php?acao=decrement&id=" . $id . "' class='btn btn-secondary'><i class='fas fa-minus'></i></a>";
+            echo "<div class='item-actions'>";
+            echo "<a href='carrinho.php?acao=remove&id=" . $id . "' class='btn-remove'>Remover</a>";
+            echo "<a href='carrinho.php?acao=increment&id=" . $id . "' class='btn-increment'>+</a>";
+            echo "<a href='carrinho.php?acao=decrement&id=" . $id . "' class='btn-decrement'>-</a>";
+            echo "</div>";
+            echo "</div>";
             echo "</div>";
         } else {
             echo "<p>Produto com ID $id não encontrado.</p>";
         }
     }
 
+    echo "<div class='cart-total'>";
     echo "<h3>Total: R$ " . number_format($total, 2, ',', '.') . "</h3>";
+    echo "</div>";
+    echo "</div>";
 }
 
 ?>
@@ -95,40 +102,7 @@ function exibirCarrinho() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho de Compras</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM98P7e6bFDSnU1pXh7w2FsmFOi7UbZ00X79k2" crossorigin="anonymous">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        header {
-            background-color: #343a40;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        .cart-item {
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        .product-image {
-            width: 100px;
-            height: auto;
-        }
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #343a40;
-            color: white;
-        }
-        .btn-danger, .btn-secondary {
-            margin-top: 10px;
-            margin-right: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="carrinho.css">
 </head>
 <body>
 
@@ -138,23 +112,18 @@ function exibirCarrinho() {
 
     <main class="container mt-5">
         <?php exibirCarrinho(); ?>
-        
-        <!-- Exibe a mensagem de frete grátis apenas se houver itens no carrinho -->
+
         <?php if (!empty($_SESSION['carrinho'])): ?>
-            <div class="alert alert-info" role="alert">
+            <div class="alert">
                 <h3>Frete Grátis!</h3>
                 <p>Oferecemos frete grátis para todo o Brasil.</p>
             </div>
-        <?php endif; ?>
-        
-        <!-- Botão para finalizar compra -->
-        <?php if (!empty($_SESSION['carrinho'])): ?>
             <form action="../compra/compra.php" method="POST">
-                <button type="submit" class="btn btn-success" style="margin-top: 20px;">Finalizar Compra</button>
+                <button type="submit" class="btn btn-finalizar">Finalizar Compra</button>
             </form>
         <?php endif; ?>
         
-        <a href="../dashboard/dashboard.php" class="btn btn-primary" style="margin-top: 20px;">Voltar à Loja</a>
+        <a href="../dashboard/dashboard.php" class="btn btn-voltar">Voltar à Loja</a>
     </main>
 
     <footer>

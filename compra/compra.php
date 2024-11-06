@@ -2,12 +2,7 @@
 session_start();
 include_once('../config.php');
 
-// Verifica se o usuário está logado e se o ID do cliente foi definido na sessão
-if (!isset($_SESSION['email']) || !isset($_SESSION['id_cliente'])) {
-    // Caso contrário, redireciona para a página de login ou exibe uma mensagem de erro
-    header('Location: ../login/login.php');
-    exit();
-}
+
 // Adicionando um item ao carrinho
 if (isset($_GET['acao']) && $_GET['acao'] == 'add' && isset($_GET['id'])) {
     $id = intval($_GET['id']);

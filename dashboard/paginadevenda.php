@@ -1,6 +1,12 @@
 <?php
 session_start();
-include_once '../config.php';
+include_once('../config.php');
+
+// Verifica se o usuário está logado e se o ID do cliente foi definido na sessão
+if (!isset($_SESSION['email']) || !isset($_SESSION['id_cliente'])) {
+    header('Location: ../login/login.php');
+    exit();
+}
 
 if (isset($_GET['id'])) {
     $id = (int)$_GET['id'];
@@ -35,7 +41,29 @@ if (isset($_SESSION['email'])) {
         $isAdmin = (bool)$row['e_admin'];
     }
 }
+
+
+
+// Adiciona o produto aos favoritos
+if (isset($_POST['favoritar'])) {
+    $id_produto = $produto['id'];
+    $nome = $produto['nome'];
+    $valor = $produto['preco'];
+    $id_cliente = $_SESSION['id_cliente']; // ID do cliente da sessão
+    $imagem = $produto['imagem'];
+
+    // Inserir o produto nos favoritos
+    $stmt = $conexao->prepare('INSERT INTO favoritos (id_produto, nome, valor, id_cliente, imagem) VALUES (?, ?, ?, ?, ?)');
+    $stmt->bind_param('isdis', $id_produto, $nome, $valor, $id_cliente, $imagem);
+    
+    if ($stmt->execute()) {
+        echo "<script>alert('Produto adicionado aos favoritos!');</script>";
+    } else {
+        echo "<script>alert('Erro ao adicionar aos favoritos.');</script>";
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -74,7 +102,7 @@ if (isset($_SESSION['email'])) {
             <a href="https://wa.me/+554288697902" class="support-button">
                 <i class="fas fa-headset"></i> ATENDIMENTO AO CLIENTE <!-- Link para atendimento ao cliente -->
             </a>
-            <button class="favorites-button" onclick="window.location.href='#'">
+            <button class="favorites-button" onclick="window.location.href='../favoritos/favoritos.php'">
                 <i class="fas fa-heart"></i> MEUS FAVORITOS <!-- Botão para favoritos -->
             </button>
             <button class="mode-button" id="mode-button" onclick="toggleMode()">
@@ -164,6 +192,17 @@ if (isset($_SESSION['email'])) {
     margin-top: 10px;
     background-color: green /* Altere esta linha para definir a cor roxa */
 }
+.add-to-cart-button2 {
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    color: #fff; /* Cor do texto, mantenha como branco para contraste */
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    background-color: blue /* Altere esta linha para definir a cor roxa */
+}
 
     .installment-options {
         margin-top: 25px;
@@ -224,7 +263,7 @@ if (isset($_SESSION['email'])) {
 .text-content2 {
     text-align: left; /* Alinhamento do texto à esquerda */
     margin-right: 100px; /* Espaço entre o texto e a imagem */
-    margin-top: -220px;
+    margin-top: -180px;
     margin-right: 350px;
 }
 
@@ -235,7 +274,7 @@ if (isset($_SESSION['email'])) {
     padding: 20px;
     border-radius: 10px;
     margin-right: 70px; /* Espaço entre o texto e a imagem */
-    margin-top: 100px;
+    margin-top: 70px;
     margin-left: 100px;
 }
 .image-content2 img {
@@ -287,6 +326,13 @@ if (isset($_SESSION['email'])) {
     margin-top: 25px;
     color: white; /* Define a cor do texto como branca */
 }
+.copy{
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #3233;
+            color: white;
+}
 
 </style>
 
@@ -304,7 +350,11 @@ if (isset($_SESSION['email'])) {
                     <input type="hidden" name="acao" value="add">
                     <input type="hidden" name="id" value="<?php echo $produto['id']; ?>">
                     <button type="submit" class="add-to-cart-button"><i class="fa-solid fa-cart-plus"></i> Adicionar ao Carrinho</button>
-                </form>   
+                </form>  
+                <form method="POST">
+                    <button type="submit" name="favoritar" class="add-to-cart-button2"><i class="fas fa-heart"></i>Adicionar aos Favoritos</button>
+                </form>
+ 
 
 
             <!-- Opções de parcelamento -->
@@ -364,10 +414,13 @@ if (isset($_SESSION['email'])) {
     </div>
 </div>
 
- 
- </head>
- <body>
-<script>
+
+</head>
+<body>
+    <footer class="copy">
+            <p>&copy; 2023 Loja Exemplo. Todos os direitos reservados.</p>
+        </footer>
+    <script>
     
 // Função para alternar entre os modos claro e escuro
 function toggleMode() {
@@ -416,8 +469,5 @@ function toggleMode() {
         }
     };
 </script>
-<footer>
-        <p>&copy; 2023 Loja Exemplo. Todos os direitos reservados.</p>
-    </footer>
 </body>
 </html>

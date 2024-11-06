@@ -18,9 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imagemdescricao = mysqli_real_escape_string($conexao, $_POST['imagemdescricao']);
     $segundaimagemdesc = mysqli_real_escape_string($conexao, $_POST['segundaimagemdesc']);
     $segundadescricao = mysqli_real_escape_string($conexao, $_POST['segundadescricao']);
+    $quantidade = mysqli_real_escape_string($conexao, $_POST['quantidade']);
 
     // Inserção do produto no banco de dados
-    $sql = "INSERT INTO produtos (nome, preco, descricao, imagem, imagemdescricao, categoria_id, segundaimagemdesc, segundadescricao ) VALUES ('$nome', '$preco', '$descricao', '$imagem', '$imagemdescricao', '$categoria_id', '$segundaimagemdesc', '$segundadescricao')";
+    $sql = "INSERT INTO produtos (nome, preco, descricao, imagem, imagemdescricao, categoria_id, segundaimagemdesc, segundadescricao, quantidade ) VALUES ('$nome', '$preco', '$descricao', '$imagem', '$imagemdescricao', '$categoria_id', '$segundaimagemdesc', '$segundadescricao', '$quantidade')";
     if (mysqli_query($conexao, $sql)) {
         $_SESSION['mensagem'] = "Produto adicionado com sucesso!";
     } else {
@@ -53,19 +54,29 @@ if (!$result) {
     <!-- Formulário para adicionar um novo produto -->
     <h2>Adicionar Produto</h2>
     <form action="produtos.php" method="POST"> 
+    <label for="nome"><br>NOME DO PRODUTO:</label>
         <input type="text" name="nome" placeholder="Nome do Produto" required>
+        <br>
+        <label for="preco"><br>PREÇO DO PRODUTO:</label>
         <input type="text" name="preco" placeholder="Preço" required>
+        <br>
+        <label for="preco"><br>DESCRIÇAO DO PRODUTO:</label>
         <input type="text" name="descricao" placeholder="Descrição" required>
+        <br>
+        <label for="imagem"><br>SEGUNDA DESCRIÇAO DOPRODUTO:</label>
         <input type="text" name="segundadescricao" placeholder="Segunda Descrição" required>
         <br>
-        <label for="imagem"><br>IMAGEM PRODUTO:</label>
+        <label for="imagem"><br>IMAGEM DO PRODUTO:</label>
         <input type="text" name="imagem" placeholder="URL da Imagem" required>
-
+                <br>
         <label for="imagemdescricao"><br>IMAGEM DA DESCRIÇÃO:</label>
         <input type="text" name="imagemdescricao" placeholder="URL da Imagem" required>
 
         <label for="segundaimagemdesc">SEGUNDA IMAGEM DESCRIÇÃO:</label>
         <input type="text" name="segundaimagemdesc" placeholder="URL da Segunda Imagem" required>
+
+        <label for="segundaimagemdesc">QUANTIDADE DO ESTOQUE:</label>
+        <input type="number" name="quantidade" placeholder="Quantidade Inicial" required>
         
         <label for="categoria_id">ID da Categoria:</label>
         <input type="text" name="categoria_id" placeholder="Digite o ID da Categoria" required>
@@ -132,6 +143,7 @@ if (!$result) {
         echo "<td>" . htmlspecialchars($row['categoria_id']) . "</td>";
         echo "<td>"; 
 
+            
         // Formulário para editar
         echo "<form action='editar.php' method='POST' style='display:inline;'>";
         echo "<input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>";

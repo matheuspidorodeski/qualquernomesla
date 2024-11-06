@@ -1,10 +1,9 @@
-<?php
+<?php 
 session_start();
 include_once('../config.php');
 
 // Verifica se o usuário está logado e se o ID do cliente foi definido na sessão
 if (!isset($_SESSION['email']) || !isset($_SESSION['id_cliente'])) {
-    // Caso contrário, redireciona para a página de login ou exibe uma mensagem de erro
     header('Location: ../login/login.php');
     exit();
 }
@@ -12,7 +11,7 @@ if (!isset($_SESSION['email']) || !isset($_SESSION['id_cliente'])) {
 // Calcula o total do carrinho
 $total = 0;
 foreach ($_SESSION['carrinho'] as $id => $quantidade) {
-    $stmt = $conexao->prepare("SELECT preco FROM produtos WHERE id = ?");
+    $stmt = $conexao->prepare("SELECT preco, nome, imagem FROM produtos WHERE id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $resultado = $stmt->get_result();
@@ -27,7 +26,9 @@ foreach ($_SESSION['carrinho'] as $id => $quantidade) {
 // Processa o formulário de pagamento se enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['metodo_pagamento'])) {
     $metodo_pagamento = $_POST['metodo_pagamento'];
-    
+    // Obtém o número de parcelas ou define como 1 se não foi selecionado
+    $parcelas = ($metodo_pagamento === 'credito' && isset($_POST['parcelas'])) ? (int)$_POST['parcelas'] : 1;
+
     // Aplica desconto de 15% se o método de pagamento for Pix
     if ($metodo_pagamento === 'pix') {
         $total *= 0.85; // Aplica 15% de desconto
@@ -36,14 +37,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['metodo_pagamento'])) {
     // Insere o pedido na tabela "compras"
     $data_compra = date('Y-m-d H:i:s'); // Adiciona a data da compra
     $id_cliente = $_SESSION['id_cliente']; // Obtém o ID do cliente da sessão
-    $id_usuario_logado = $_SESSION['id_usuario']; // Obtém o ID do usuário logado da sessão
 
     foreach ($_SESSION['carrinho'] as $id => $quantidade) {
-        // Insere cada item do carrinho na tabela "compras"
-        $stmt = $conexao->prepare("INSERT INTO compras (valor, metodo_pagamento, data_compra, id_produto, quantidade, id_cliente) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("dsiiii", $total, $metodo_pagamento, $data_compra, $id, $quantidade, $id_cliente);
+        // Busca os dados do produto
+        $stmt = $conexao->prepare("SELECT nome, imagem, preco FROM produtos WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+        $produto = $resultado->fetch_assoc();
 
-        if (!$stmt->execute()) {
+        // Verifica a quantidade disponível no estoque (tabela estoque)
+        $stmt_estoque = $conexao->prepare("SELECT quantidade FROM estoque WHERE id_produto = ?");
+        $stmt_estoque->bind_param("i", $id);
+        $stmt_estoque->execute();
+        $resultado_estoque = $stmt_estoque->get_result();
+        
+        if ($resultado_estoque && $resultado_estoque->num_rows > 0) {
+            $estoque = $resultado_estoque->fetch_assoc();
+            // Verifica se a quantidade no estoque é suficiente
+            if ($quantidade > $estoque['quantidade']) {
+                // Caso a quantidade no estoque seja insuficiente, exibe uma mensagem de erro e interrompe o processo
+                echo "<script>
+                        alert('Quantidade insuficiente de " . htmlspecialchars($produto['nome']) . " no estoque.');
+                        window.location.href = '../carrinho/carrinho.php'; // Altere para a página do carrinho
+                      </script>";
+                exit;
+            }
+
+            // Atualiza o estoque subtraindo a quantidade comprada
+            $novo_estoque = $estoque['quantidade'] - $quantidade;
+            $stmt_atualiza_estoque = $conexao->prepare("UPDATE estoque SET quantidade = ? WHERE id_produto = ?");
+            $stmt_atualiza_estoque->bind_param("ii", $novo_estoque, $id);
+
+            if (!$stmt_atualiza_estoque->execute()) {
+                echo "Erro ao atualizar o estoque. Tente novamente.";
+                exit;
+            }
+        } else {
+            echo "Erro ao verificar o estoque do produto.";
+            exit;
+        }
+
+        // Insere cada item do carrinho na tabela "compras"
+        $stmt_compras = $conexao->prepare("INSERT INTO compras (valor, metodo_pagamento, data_compra, id_produto, quantidade, id_cliente, parcelas) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt_compras->bind_param("dsiiiii", $total, $metodo_pagamento, $data_compra, $id, $quantidade, $id_cliente, $parcelas);
+
+        if (!$stmt_compras->execute()) {
             echo "Erro ao inserir o item no pedido. Por favor, tente novamente.";
             exit;
         }
@@ -57,6 +96,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['metodo_pagamento'])) {
 
         if (!$stmt_status->execute()) {
             echo "Erro ao inserir o status do pedido. Por favor, tente novamente.";
+            exit;
+        }
+
+        // Insere na tabela "relatorio_venda"
+        $stmt_relatorio = $conexao->prepare("INSERT INTO relatorio_venda (id_produto, nome, valor, quantidade, metodo_pagamento, imagem, data_venda) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt_relatorio->bind_param("isdiiss", $id, $produto['nome'], $produto['preco'], $quantidade, $metodo_pagamento, $produto['imagem'], $data_compra);
+
+        if (!$stmt_relatorio->execute()) {
+            echo "Erro ao inserir no relatório de vendas. Por favor, tente novamente.";
             exit;
         }
     }
@@ -120,6 +168,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['metodo_pagamento'])) {
             </select>
         </div>
 
+        <!-- Exibe as opções de parcelamento quando "Cartão de Crédito" for selecionado -->
+        <div id="parcelas" style="display:none;">
+            <label for="parcelasSelect">Número de Parcelas:</label>
+            <select name="parcelas" id="parcelasSelect" class="form-control" onchange="calcularParcelas()">
+                <option value="1">1x</option>
+                <option value="2">2x</option>
+                <option value="3">3x</option>
+                <option value="4">4x</option>
+                <option value="5">5x</option>
+                <option value="6">6x</option>
+                <option value="7">7x</option>
+                <option value="8">8x</option>
+                <option value="9">9x</option>
+                <option value="10">10x</option>
+                <option value="11">11x</option>
+                <option value="12">12x</option>
+            </select>
+        </div>
+
+        <div id="valorParcelado" style="display:none; margin-top: 20px;">
+            <h4>Valor de cada parcela: R$ <span id="valorParcelas"></span></h4>
+        </div>
+
         <!-- Exibe o QR code quando "Pix" for selecionado -->
         <div id="qrCode" style="display:none; margin-top: 20px;">
             <h3>Pagamento via Pix</h3>
@@ -131,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['metodo_pagamento'])) {
             <h4>Total com 15% de desconto: R$ <span id="totalDescontado"></span></h4>
         </div>
 
-        <button type="submit" class="btn btn-primary">Finalizar compra</button>
+        <button type="submit" class="btn btn-primary">Finalizar Compra</button>
     </form>
 
     <script>
@@ -143,6 +214,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['metodo_pagamento'])) {
         const qrCodeDiv = document.getElementById("qrCode");
         const totalDescontoDiv = document.getElementById("totalComDesconto");
         const totalDescontadoSpan = document.getElementById("totalDescontado");
+        const parcelasDiv = document.getElementById("parcelas");
+        const valorParceladoDiv = document.getElementById("valorParcelado");
 
         if (metodoPagamento === "pix") {
             // Calcula o desconto de 15%
@@ -152,13 +225,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['metodo_pagamento'])) {
             qrCodeDiv.style.display = "block";
             totalDescontoDiv.style.display = "block";
             totalDescontadoSpan.innerText = totalComDesconto.toFixed(2).replace(".", ",");
+            parcelasDiv.style.display = "none";
+            valorParceladoDiv.style.display = "none";
+        } else if (metodoPagamento === "credito") {
+            parcelasDiv.style.display = "block";
+            qrCodeDiv.style.display = "none";
+            totalDescontoDiv.style.display = "none";
         } else {
-            // Esconde o QR code e o total com desconto se não for Pix
+            parcelasDiv.style.display = "none";
             qrCodeDiv.style.display = "none";
             totalDescontoDiv.style.display = "none";
         }
     }
+
+    function calcularParcelas() {
+        const parcelas = document.getElementById("parcelasSelect").value;
+        const valorParcelas = totalOriginal / parcelas;
+        document.getElementById("valorParcelas").innerText = valorParcelas.toFixed(2).replace(".", ",");
+        document.getElementById("valorParcelado").style.display = "block";
+    }
     </script>
+
 </div>
 </body>
 </html>

@@ -1,11 +1,12 @@
 <?php
-session_start(); // Inicia a sessão do PHP, permitindo o uso de variáveis de sessão.
-include_once('../config.php'); // Inclui o arquivo de configuração, onde a conexão ao banco de dados é estabelecida.
+session_start();
+include_once('../config.php');
 
-// Verifica se o usuário está logado
-if ((!isset($_SESSION['email']) == true) and (!isset($_SESSION['senha']) == true)) {
-    unset($_SESSION['email']); // Remove a variável de sessão 'email' se não estiver setada.
-    unset($_SESSION['senha']); // Remove a variável de sessão 'senha' se não estiver setada.
+// Verifica se o usuário está logado e se o ID do cliente foi definido na sessão
+if (!isset($_SESSION['email']) || !isset($_SESSION['id_cliente'])) {
+    // Caso contrário, redireciona para a página de login ou exibe uma mensagem de erro
+    header('Location: ../login/login.php');
+    exit();
 }
 
 // Verifica se o usuário logado é administrador
@@ -66,7 +67,7 @@ $theme = isset($_COOKIE['theme']) ? $_COOKIE['theme'] : 'dark-mode'; // Se o coo
             <a href="https://wa.me/+554288697902" class="support-button">
                 <i class="fas fa-headset"></i> ATENDIMENTO AO CLIENTE <!-- Link para atendimento ao cliente -->
             </a>
-            <button class="favorites-button" onclick="window.location.href='#'">
+            <button class="favorites-button" onclick="window.location.href='../favoritos/favoritos.php'">
                 <i class="fas fa-heart"></i> MEUS FAVORITOS <!-- Botão para favoritos -->
             </button>
             <button class="mode-button" id="mode-button" onclick="toggleMode()">
@@ -154,4 +155,8 @@ $theme = isset($_COOKIE['theme']) ? $_COOKIE['theme'] : 'dark-mode'; // Se o coo
 
 <script src="../scripts/dash.js"></script> <!-- Importa o JavaScript para a dashboard -->
 </body>
+<footer class="copy">
+        <p>&copy; 2023 Loja Exemplo. Todos os direitos reservados.</p>
+        
+    </footer>
 </html>

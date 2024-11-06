@@ -1,7 +1,13 @@
 <?php
-session_start(); // Inicia a sessão
-include_once("../config.php"); // Verifique se o caminho está correto
+session_start();
+include_once('../config.php');
 
+// Verifica se o usuário está logado e se o ID do cliente foi definido na sessão
+if (!isset($_SESSION['email']) || !isset($_SESSION['id_cliente'])) {
+    // Caso contrário, redireciona para a página de login ou exibe uma mensagem de erro
+    header('Location: ../login/login.php');
+    exit();
+}
 // Testa a conexão
 if (!$conexao) {
     die("Erro na conexão: " . mysqli_connect_error());
